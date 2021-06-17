@@ -4,7 +4,7 @@
     <div
       *ngFor="let formItem of form.controls; let i = index"
       address
-      [formGroup]="getFormGroup(formItem)"
+      [formGroup]="formItem"
       [index]="i"
       (removeAddress)="onRemoveAddress($event)"
     ></div>
