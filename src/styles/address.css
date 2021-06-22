@@ -2,6 +2,18 @@
   border: 1px solid red !important;
 }
 
+.error {
+  color: red;
+}
+
+.group {
+  margin: 16px 0px;
+}
+
+p.error {
+  margin: 0px;
+}
+
 .address {
   border: 1px solid black;
   padding: 16px;

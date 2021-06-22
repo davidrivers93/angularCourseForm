@@ -1,16 +1,1 @@
-<body *ngIf="form">
-  <button class="btn btn-primary" (click)="addItem()">Añadir</button>
-  <form>
-    <div
-      *ngFor="let formItem of form.controls; let i = index"
-      address
-      [formGroup]="formItem"
-      [index]="i"
-      (removeAddress)="onRemoveAddress($event)"
-    ></div>
-    {{ form.valid }}
-    <button class="btn btn-primary" [disabled]="form.invalid">
-      {{ form.valid ? "Es válido" : "No es válido" }}
-    </button>
-  </form>
-</body>
+<router-outlet></router-outlet>

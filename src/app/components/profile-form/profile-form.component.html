@@ -1,0 +1,26 @@
+<button class="btn btn-primary" (click)="addItem()">Añadir</button>
+<form [formGroup]="form">
+  <div class="group">
+    <input placeholder="Edad" formControlName="age" />
+    <p class="error" *ngIf="getControlErrorMessage('age')">
+      {{ getControlErrorMessage("age") }}
+    </p>
+  </div>
+  <div class="group" password [password]="form.get('password')"></div>
+  <div
+    *ngFor="let formItem of getAddressArray().controls; let i = index"
+    address
+    [formGroup]="formItem"
+    [index]="i"
+    (removeAddress)="onRemoveAddress($event)"
+    class="group"
+  ></div>
+  {{ form.valid }}
+  <button
+    class="btn btn-primary"
+    (click)="onSubmit()"
+    [disabled]="form.invalid"
+  >
+    {{ form.valid ? "Es válido" : "No es válido" }}
+  </button>
+</form>
