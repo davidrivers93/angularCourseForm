@@ -2,9 +2,6 @@
 <form [formGroup]="form">
   <div class="group">
     <input controlError placeholder="Edad" formControlName="age" />
-    <p class="error" *ngIf="getControlErrorMessage('age')">
-      {{ getControlErrorMessage("age") }}
-    </p>
   </div>
   <div class="group" password [password]="form.get('password')"></div>
   <div
