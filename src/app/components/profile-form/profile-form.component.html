@@ -1,7 +1,7 @@
 <button class="btn btn-primary" (click)="addItem()">Añadir</button>
 <form [formGroup]="form">
   <div class="group">
-    <input placeholder="Edad" formControlName="age" />
+    <input controlError placeholder="Edad" formControlName="age" />
     <p class="error" *ngIf="getControlErrorMessage('age')">
       {{ getControlErrorMessage("age") }}
     </p>

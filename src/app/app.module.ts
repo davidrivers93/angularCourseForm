@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { AddressComponent } from './components/address/address.component';
 import { PasswordComponent } from './components/password/password.component';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
+import { SharedModule } from './modules/shared/shared.module';
 import { FormPageComponent } from './pages/form/form-page.component';
 import { ProfileService } from './services/profile.service';
 
@@ -18,7 +19,7 @@ import { ProfileService } from './services/profile.service';
     AddressComponent,
     PasswordComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
+  imports: [BrowserModule, SharedModule, AppRoutingModule, ReactiveFormsModule],
   providers: [ProfileService],
   bootstrap: [AppComponent],
 })
