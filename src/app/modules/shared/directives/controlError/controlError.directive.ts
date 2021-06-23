@@ -70,6 +70,7 @@ export class ControlErrorDirective implements AfterViewInit {
 
     this.createErrorComponent();
     this.setError(errors);
+    this.setErrorClass();
   }
 
   private subscribeToChanges(): void {
