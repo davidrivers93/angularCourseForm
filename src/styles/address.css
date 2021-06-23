@@ -84,4 +84,9 @@ input {
 
 .cdk-overlay-connected-position-bounding-box {
   position: absolute;
+  max-height: 50px;
+}
+
+.form--error {
+  border-color: red;
 }
