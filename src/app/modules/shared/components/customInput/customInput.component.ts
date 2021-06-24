@@ -1,13 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'customInput',
   templateUrl: './customInput.component.html',
 })
-export class CustomInputComponent implements OnInit {
+export class CustomInputComponent {
   @Input() disabled = false;
-
-  constructor() {}
-
-  ngOnInit() {}
 }

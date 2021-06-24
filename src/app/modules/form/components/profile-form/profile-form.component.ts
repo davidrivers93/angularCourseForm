@@ -8,7 +8,6 @@ import {
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Profile } from '../../models/profile.model';
-import { VALIDATORS_MESSAGES } from '../../validators/messages';
 import { minAgeValidator } from '../../validators/minAge.validator';
 import { passwordValidator } from '../../validators/password.validator';
 
@@ -81,17 +80,6 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     return this.form.get(`${FORM_KEYS.PASSWORD}`) as FormGroup;
   }
 
-  getControlErrorMessage(controlName: string): string {
-    const control = this.form.get(controlName);
-    if (!control || control.errors === null) {
-      return null;
-    }
-
-    const [firstError] = Object.entries(control.errors);
-
-    return VALIDATORS_MESSAGES[firstError[0]](firstError[1]);
-  }
-
   onSubmit(): void {
     const values = parseForm(this.form.value);
     this.submitForm.emit(values);
@@ -105,7 +93,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       0: this.formBuilder.group({
         age: ['', { validators: [Validators.required, minAgeValidator(21)] }],
-        name: [''],
+        name: ['', { validators: [Validators.required] }],
       }),
       1: this.formBuilder.group(
         {
@@ -124,8 +112,8 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
 
 function parseForm(formValue: FormProfile): Profile {
   return {
-    age: formValue.age,
-    addresses: formValue.addresses,
-    password: formValue.password.password,
+    age: formValue[FORM_KEYS.PERSONAL_DATA].age,
+    addresses: formValue[FORM_KEYS.ADDRESSES],
+    password: formValue[FORM_KEYS.PASSWORD].password,
   };
 }

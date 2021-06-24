@@ -112,7 +112,7 @@ export class ControlErrorDirective implements AfterViewInit {
           originY: 'top',
           overlayX: 'start',
           overlayY: 'bottom',
-          offsetY: -5,
+          offsetY: 0,
         },
       ]);
 
