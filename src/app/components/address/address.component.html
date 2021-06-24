@@ -1,10 +1,14 @@
 <div class="address" [class.address--error]="!formGroup.valid">
   <h3>Dirección número {{ index + 1 }}</h3>
   <div [formGroup]="formGroup">
-    <input placeholder="Dirección" formControlName="direction" />
-    <input placeholder="Código postal" formControlName="postalCode" />
-    <input placeholder="Ciudad" formControlName="city" />
-    <input placeholder="País" formControlName="country" />
+    <input controlError placeholder="Dirección" formControlName="direction" />
+    <input
+      controlError
+      placeholder="Código postal"
+      formControlName="postalCode"
+    />
+    <input controlError placeholder="Ciudad" formControlName="city" />
+    <input controlError placeholder="País" formControlName="country" />
   </div>
   <button class="btn btn-danger" (click)="removeItem()">Eliminar</button>
 </div>

@@ -70,3 +70,23 @@ input {
 .btn:disabled {
   opacity: 0.65;
 }
+
+.panel--error > div {
+  background-color: white;
+  border: 1px solid red;
+  color: red;
+  position: absolute;
+}
+
+.panel--error p {
+  margin: 4px 0px;
+}
+
+.cdk-overlay-connected-position-bounding-box {
+  position: absolute;
+  max-height: 50px;
+}
+
+.form--error {
+  border-color: red;
+}
