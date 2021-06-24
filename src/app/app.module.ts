@@ -1,26 +1,26 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AddressComponent } from './components/address/address.component';
-import { PasswordComponent } from './components/password/password.component';
-import { ProfileFormComponent } from './components/profile-form/profile-form.component';
-import { SharedModule } from './modules/shared/shared.module';
-import { FormPageComponent } from './pages/form/form-page.component';
-import { ProfileService } from './services/profile.service';
+
+import { PortalModule } from '@angular/cdk/portal';
+import { FormModule } from './modules/form/form.module';
+import { Overlay } from '@angular/cdk/overlay';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ProfileFormComponent,
-    FormPageComponent,
-    AddressComponent,
-    PasswordComponent,
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    PortalModule,
+    FormModule,
   ],
-  imports: [BrowserModule, SharedModule, AppRoutingModule, ReactiveFormsModule],
-  providers: [ProfileService],
+  providers: [Overlay],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

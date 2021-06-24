@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { VALIDATORS_MESSAGES } from 'src/app/validators/messages';
+import { VALIDATORS_MESSAGES } from '../../validators/messages';
 
 @Component({
   selector: '[password]',

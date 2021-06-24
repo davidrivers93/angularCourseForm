@@ -80,6 +80,7 @@ input {
 
 .panel--error p {
   margin: 4px 0px;
+  font-size: 10px;
 }
 
 .cdk-overlay-connected-position-bounding-box {

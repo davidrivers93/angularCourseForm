@@ -1,0 +1,36 @@
+<form [formGroup]="form">
+  <div *ngIf="step === FORM_KEYS.PERSONAL_DATA" formGroupName="0" class="group">
+    <input controlError placeholder="Edad" formControlName="age" />
+    <input controlError placeholder="Nombre" formControlName="name" />
+  </div>
+  <div
+    *ngIf="step === FORM_KEYS.PASSWORD"
+    class="group"
+    password
+    [password]="getPasswordsGroup()"
+  ></div>
+  <div *ngIf="step === FORM_KEYS.ADDRESSES" class="group">
+    <button class="btn btn-primary" (click)="addItem()">Añadir</button>
+    <div
+      *ngFor="let formItem of getAddressArray().controls; let i = index"
+      address
+      [formGroup]="formItem"
+      [index]="i"
+      (removeAddress)="onRemoveAddress($event)"
+      class="group"
+    ></div>
+  </div>
+
+  <div
+    buttons
+    [submitDisabled]="!form.valid"
+    [nextDisabled]="!canChangeStep()"
+    [backDisabled]="!canChangeStep()"
+    [backButtonVisible]="step >= 1"
+    [nextButtonVisible]="step < maximumStep - 1"
+    [submitButtonVisible]="step === maximumStep - 1"
+    (submit)="onSubmit()"
+    (next)="onNext()"
+    (back)="onBack()"
+  ></div>
+</form>
