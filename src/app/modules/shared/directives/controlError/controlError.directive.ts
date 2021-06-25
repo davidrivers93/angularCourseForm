@@ -6,7 +6,6 @@ import {
   HostListener,
   Optional,
   Self,
-  ViewContainerRef,
 } from '@angular/core';
 import {
   FormGroupDirective,
@@ -14,16 +13,12 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { filter, map, tap } from 'rxjs/operators';
-import {
-  FlexibleConnectedPositionStrategy,
-  Overlay,
-  OverlayRef,
-} from '@angular/cdk/overlay';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ErrorMessageComponent } from '../../components/error-message/error-message.component';
-import { VALIDATORS_MESSAGES } from 'src/app/validators/messages';
 import { Observable } from 'rxjs';
+import { VALIDATORS_MESSAGES } from 'src/app/modules/form/validators/messages';
 
 @Directive({ selector: '[controlError]' })
 export class ControlErrorDirective implements AfterViewInit {
@@ -117,7 +112,7 @@ export class ControlErrorDirective implements AfterViewInit {
           originY: 'top',
           overlayX: 'start',
           overlayY: 'bottom',
-          offsetY: 20,
+          offsetY: 0,
         },
       ]);
 

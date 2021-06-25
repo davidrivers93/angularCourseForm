@@ -7,14 +7,14 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { Profile } from 'src/app/models/profile.model';
-import { VALIDATORS_MESSAGES } from 'src/app/validators/messages';
-import { minAgeValidator } from 'src/app/validators/minAge.validator';
-import { passwordValidator } from 'src/app/validators/password.validator';
+import { Profile } from '../../../core/models/profile.model';
+import { minAgeValidator } from '../../validators/minAge.validator';
+import { passwordValidator } from '../../validators/password.validator';
 
 const FORM_KEYS = {
-  ADDRESSES: 'addresses',
-  MIN_AGE: 'age',
+  PERSONAL_DATA: 0,
+  PASSWORD: 1,
+  ADDRESSES: 2,
 };
 
 interface FormProfile {
@@ -30,8 +30,13 @@ interface FormProfile {
 export class ProfileFormComponent implements OnInit, OnDestroy {
   @Output() submitForm = new EventEmitter<Profile>();
 
+  step = 0;
+  maximumStep = 0;
+
   form: FormGroup;
   unsubscribe = new BehaviorSubject<any>(null);
+
+  FORM_KEYS = FORM_KEYS;
 
   constructor(private formBuilder: FormBuilder) {}
 
@@ -42,10 +47,19 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initForm();
+    this.maximumStep = Object.values(FORM_KEYS).length;
   }
 
   onRemoveAddress(index: number) {
     this.getAddressArray().removeAt(index);
+  }
+
+  onNext() {
+    this.step++;
+  }
+
+  onBack() {
+    this.step--;
   }
 
   addItem(): void {
@@ -59,18 +73,11 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   getAddressArray(): FormArray {
-    return this.form.get(FORM_KEYS.ADDRESSES) as FormArray;
+    return this.form.get(`${FORM_KEYS.ADDRESSES}`) as FormArray;
   }
 
-  getControlErrorMessage(controlName: string): string {
-    const control = this.form.get(controlName);
-    if (!control || control.errors === null) {
-      return null;
-    }
-
-    const [firstError] = Object.entries(control.errors);
-
-    return VALIDATORS_MESSAGES[firstError[0]](firstError[1]);
+  getPasswordsGroup(): FormGroup {
+    return this.form.get(`${FORM_KEYS.PASSWORD}`) as FormGroup;
   }
 
   onSubmit(): void {
@@ -78,29 +85,36 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     this.submitForm.emit(values);
   }
 
+  canChangeStep(): boolean {
+    return this.form.get(`${this.step}`).valid;
+  }
+
   private initForm(): void {
     this.form = this.formBuilder.group({
-      age: ['', { validators: [Validators.required, minAgeValidator(21)] }],
-      addresses: this.formBuilder.array([]),
-      password: this.formBuilder.group(
+      0: this.formBuilder.group({
+        age: ['', { validators: [Validators.required, minAgeValidator(21)] }],
+        name: ['', { validators: [Validators.required] }],
+      }),
+      1: this.formBuilder.group(
         {
-          password: [''],
-          confirmPassword: '',
+          password: ['', [Validators.required]],
+          confirmPassword: ['', [Validators.required]],
         },
         {
-          validators: [passwordValidator],
+          validators: [Validators.required, passwordValidator],
         }
       ),
+      2: this.formBuilder.array([]),
     });
-
     this.addItem();
   }
 }
 
 function parseForm(formValue: FormProfile): Profile {
   return {
-    age: formValue.age,
-    addresses: formValue.addresses,
-    password: formValue.password.password,
+    age: formValue[FORM_KEYS.PERSONAL_DATA].age,
+    name: formValue[FORM_KEYS.PERSONAL_DATA].name,
+    addresses: formValue[FORM_KEYS.ADDRESSES],
+    password: formValue[FORM_KEYS.PASSWORD].password,
   };
 }

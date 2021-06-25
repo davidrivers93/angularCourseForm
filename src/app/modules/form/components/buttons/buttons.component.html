@@ -1,0 +1,24 @@
+<button
+  *ngIf="backButtonVisible"
+  class="btn btn-primary"
+  (click)="onBack()"
+  [disabled]="backDisabled"
+>
+  Anterior
+</button>
+<button
+  *ngIf="nextButtonVisible"
+  class="btn btn-primary"
+  (click)="onNext()"
+  [disabled]="nextDisabled"
+>
+  Siguiente
+</button>
+<button
+  *ngIf="submitButtonVisible"
+  class="btn btn-primary"
+  (click)="onSubmit()"
+  [disabled]="submitDisabled"
+>
+  Guardar
+</button>

@@ -1,0 +1,30 @@
+<h2>Datos personales:</h2>
+<div>
+  <p>Nombre: {{ profile.name }}</p>
+</div>
+<div>
+  <p>Edad: {{ profile.age }}</p>
+</div>
+<h2>Direcciones:</h2>
+<div *ngFor="let address of profile.addresses; let i = index">
+  <div>
+    <h3>Dirección {{ i + 1 }}</h3>
+  </div>
+  <div>
+    <p>Dirección: {{ address.direction }}</p>
+  </div>
+  <div>
+    <p>Código postal: {{ address.postalCode }}</p>
+  </div>
+  <div>
+    <p>Ciudad: {{ address.city }}</p>
+  </div>
+  <div>
+    <p>País: {{ address.country }}</p>
+  </div>
+</div>
+<p *ngIf="!profile.addresses.length">No hay direcciones en este perfil</p>
+<h2>Password</h2>
+<div>
+  <p>Contraseña: {{ profile.password }}</p>
+</div>
