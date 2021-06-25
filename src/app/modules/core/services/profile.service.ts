@@ -4,11 +4,26 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Profile } from '../models/profile.model';
 
-type ProfileEntity = Profile & { id: number };
+export type ProfileEntity = Profile & { id: number };
+
+const PROFILE_MOCK: ProfileEntity = {
+  addresses: [
+    {
+      city: 'Valencia',
+      country: 'España',
+      direction: 'Plaza del ayuntamiento 1',
+      postalCode: 46006,
+    },
+  ],
+  age: 20,
+  id: 1,
+  password: '12',
+  name: 'David',
+};
 
 @Injectable()
 export class ProfileService {
-  private createdProfile: ProfileEntity;
+  private createdProfile = PROFILE_MOCK;
 
   constructor(private http: HttpClient) {}
 
@@ -21,5 +36,9 @@ export class ProfileService {
     this.createdProfile = createdProfile;
 
     return of(createdProfile);
+  }
+
+  getProfile(id: number): Observable<ProfileEntity> {
+    return of(this.createdProfile);
   }
 }

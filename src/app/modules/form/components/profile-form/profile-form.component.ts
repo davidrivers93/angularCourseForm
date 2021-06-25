@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { Profile } from '../../models/profile.model';
+import { Profile } from '../../../core/models/profile.model';
 import { minAgeValidator } from '../../validators/minAge.validator';
 import { passwordValidator } from '../../validators/password.validator';
 
@@ -113,6 +113,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
 function parseForm(formValue: FormProfile): Profile {
   return {
     age: formValue[FORM_KEYS.PERSONAL_DATA].age,
+    name: formValue[FORM_KEYS.PERSONAL_DATA].name,
     addresses: formValue[FORM_KEYS.ADDRESSES],
     password: formValue[FORM_KEYS.PASSWORD].password,
   };

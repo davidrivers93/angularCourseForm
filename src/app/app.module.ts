@@ -7,8 +7,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { PortalModule } from '@angular/cdk/portal';
-import { FormModule } from './modules/form/form.module';
 import { Overlay } from '@angular/cdk/overlay';
+import { CoreModule } from './modules/core/core.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +18,7 @@ import { Overlay } from '@angular/cdk/overlay';
     AppRoutingModule,
     ReactiveFormsModule,
     PortalModule,
-    FormModule,
+    CoreModule,
   ],
   providers: [Overlay],
   bootstrap: [AppComponent],
