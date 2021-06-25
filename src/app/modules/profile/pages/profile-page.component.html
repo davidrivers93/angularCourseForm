@@ -6,7 +6,10 @@
   <p>Edad: {{ profile.age }}</p>
 </div>
 <h2>Direcciones:</h2>
-<div *ngFor="let address of profile.addresses">
+<div *ngFor="let address of profile.addresses; let i = index">
+  <div>
+    <h3>Dirección {{ i + 1 }}</h3>
+  </div>
   <div>
     <p>Dirección: {{ address.direction }}</p>
   </div>
