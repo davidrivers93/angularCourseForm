@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Profile } from '../../core/models/profile.model';
-import { ProfileService } from '../../core/services/profile.service';
+import { Profile } from '../../../core/models/profile.model';
+import { ProfileService } from '../../../core/services/profile.service';
 
 @Component({
   selector: '[form-page]',
@@ -12,7 +12,7 @@ export class FormPageComponent {
 
   onSubmit(profile: Profile): void {
     this.profileService.createProfile(profile).subscribe({
-      next: ({ id }) => this.router.navigate(['profile', id]),
+      next: ({ id }: { id: number }) => this.router.navigate(['profile', id]),
     });
   }
 }

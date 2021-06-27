@@ -5,7 +5,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { PasswordComponent } from './components/password/password.component';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 import { FormRouter } from './form-routing.module';
-import { FormPageComponent } from './form/form-page.component';
+import { FormPageComponent } from './pages/form/form-page.component';
 
 @NgModule({
   imports: [FormRouter, SharedModule],

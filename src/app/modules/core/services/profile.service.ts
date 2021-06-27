@@ -6,39 +6,17 @@ import { Profile } from '../models/profile.model';
 
 export type ProfileEntity = Profile & { id: number };
 
-const PROFILE_MOCK: ProfileEntity = {
-  addresses: [
-    {
-      city: 'Valencia',
-      country: 'España',
-      direction: 'Plaza del ayuntamiento 1',
-      postalCode: 46006,
-    },
-  ],
-  age: 20,
-  id: 1,
-  password: '12',
-  name: 'David',
-};
+const URL = 'https://profile-angular-course.free.beeceptor.com';
 
 @Injectable()
 export class ProfileService {
-  private createdProfile = PROFILE_MOCK;
-
   constructor(private http: HttpClient) {}
 
-  createProfile(profile: Profile): Observable<ProfileEntity> {
-    const createdProfile = {
-      ...profile,
-      id: Math.floor(Math.random()) * 20,
-    };
-
-    this.createdProfile = createdProfile;
-
-    return of(createdProfile);
+  createProfile(profile: Profile): Observable<{ id: number }> {
+    return this.http.post<{ id: number }>(URL, profile);
   }
 
   getProfile(id: number): Observable<ProfileEntity> {
-    return of(this.createdProfile);
+    return this.http.get<ProfileEntity>(URL);
   }
 }

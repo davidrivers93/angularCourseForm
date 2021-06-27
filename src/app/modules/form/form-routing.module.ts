@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormPageComponent } from './form/form-page.component';
+import { FormPageComponent } from './pages/form/form-page.component';
 
 const routes: Routes = [
   {

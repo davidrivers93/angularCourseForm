@@ -8,7 +8,7 @@ import {
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Profile } from '../../../core/models/profile.model';
-import { minAgeValidator } from '../../validators/minAge.validator';
+import { minAgeValidator } from '../../validators/minAge/minAge.validator';
 import { passwordValidator } from '../../validators/password.validator';
 
 const FORM_KEYS = {
