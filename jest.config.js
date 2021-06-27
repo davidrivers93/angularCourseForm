@@ -4,4 +4,5 @@ module.exports = {
   coverageDirectory: "coverage",
   collectCoverageFrom: ["<rootDir>/src/app/**/*.ts"],
   coverageReporters: ["text", "text-summary", "html"],
+  testRunner: "jest-jasmine2",
 };

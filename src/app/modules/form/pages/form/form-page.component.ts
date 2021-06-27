@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Profile } from '../../core/models/profile.model';
-import { ProfileService } from '../../core/services/profile.service';
+import { Profile } from '../../../core/models/profile.model';
+import { ProfileService } from '../../../core/services/profile.service';
 
 @Component({
   selector: '[form-page]',
