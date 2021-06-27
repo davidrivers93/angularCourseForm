@@ -12,7 +12,7 @@ export class FormPageComponent {
 
   onSubmit(profile: Profile): void {
     this.profileService.createProfile(profile).subscribe({
-      next: ({ id }) => this.router.navigate(['profile', id]),
+      next: ({ id }: { id: number }) => this.router.navigate(['profile', id]),
     });
   }
 }
