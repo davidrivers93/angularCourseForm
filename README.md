@@ -30,12 +30,12 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 - Uninstall karma dependencies:
   `npm uninstall karma karma-chrome-launcher karma-coverage-istanbul-reporter karma-jasmine karma-jasmine-html-reporter`
-- Install jest dependendencies:
+- Install jest dependencies:
   `npm install -D jest jest-preset-angular @types/jest jest-jasmine2`
 - Configure `setup-test.ts` and `jest.config.js`
 
 ```
-//setup-test.ts
+//setup-jest.ts
 import 'jest-preset-angular/setup-jest';
 
 //jest.config.js
