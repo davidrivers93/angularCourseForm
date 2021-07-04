@@ -1,14 +1,10 @@
 <form [formGroup]="form">
-  <div *ngIf="step === FORM_KEYS.PERSONAL_DATA" formGroupName="0" class="group">
-    <input controlError placeholder="Edad" formControlName="age" />
-    <input controlError placeholder="Nombre" formControlName="name" />
-  </div>
   <div
-    *ngIf="step === FORM_KEYS.PASSWORD"
+    *ngIf="step === FORM_KEYS.PERSONAL_DATA"
+    personalData
     class="group"
-    password
-    [password]="getPasswordsGroup()"
   ></div>
+  <div *ngIf="step === FORM_KEYS.PASSWORD" class="group" password></div>
   <div *ngIf="step === FORM_KEYS.ADDRESSES" class="group">
     <button class="btn btn-primary" (click)="addItem()">Añadir</button>
     <div
