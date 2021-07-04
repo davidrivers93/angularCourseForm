@@ -10,6 +10,7 @@ import { FormPageComponent } from './pages/form/form-page.component';
 import { FormState } from './state/form.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { PersonalDataComponent } from './components/personalData/personalData.component';
+import { AddressesComponent } from './components/addresses/addresses.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { PersonalDataComponent } from './components/personalData/personalData.co
     ErrorComponent,
     ButtonsComponent,
     PersonalDataComponent,
+    AddressesComponent,
   ],
 })
 export class FormModule {}

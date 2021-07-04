@@ -1,6 +1,9 @@
-import { CurrentStep } from '../form.state';
+export class SetNextStep {
+  static readonly type = '[FORM STATE] Set next step';
+  constructor() {}
+}
 
-export class SetCurrentStep {
-  static readonly type = '[FORM STATE] Set current step';
-  constructor(public currentStep: CurrentStep) {}
+export class SetPreviousStep {
+  static readonly type = '[FORM STATE] Set previous step';
+  constructor() {}
 }

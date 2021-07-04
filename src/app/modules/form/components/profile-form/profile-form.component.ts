@@ -5,11 +5,14 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { FormGroup, FormArray } from '@angular/forms';
+import { Select, Store } from '@ngxs/store';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Profile } from '../../../core/models/profile.model';
-import { minAgeValidator } from '../../validators/minAge/minAge.validator';
-import { passwordValidator } from '../../validators/password.validator';
+
+import { FormState } from '../../state/form.state';
+import { CurrentStep } from '../../enum/steps';
+import { SetNextStep, SetPreviousStep } from '../../state/actions/step.state';
 
 const FORM_KEYS = {
   PERSONAL_DATA: 0,
@@ -30,6 +33,12 @@ interface FormProfile {
 export class ProfileFormComponent implements OnInit, OnDestroy {
   @Output() submitForm = new EventEmitter<Profile>();
 
+  @Select(FormState.currentStep)
+  currentStep$: Observable<CurrentStep>;
+
+  @Select(FormState.stepIsValid)
+  stepIsValid$: Observable<CurrentStep>;
+
   step = 0;
   maximumStep = 0;
 
@@ -38,7 +47,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
 
   FORM_KEYS = FORM_KEYS;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private store: Store) {}
 
   ngOnDestroy(): void {
     this.unsubscribe.next(1);
@@ -46,7 +55,6 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.initForm();
     this.maximumStep = Object.values(FORM_KEYS).length;
   }
 
@@ -55,21 +63,14 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   onNext() {
+    this.store.dispatch(new SetNextStep());
     this.step++;
   }
 
   onBack() {
-    this.step--;
-  }
+    this.store.dispatch(new SetPreviousStep());
 
-  addItem(): void {
-    const group = this.formBuilder.group({
-      direction: ['', [Validators.required]],
-      postalCode: [''],
-      city: '',
-      country: '',
-    });
-    this.getAddressArray().push(group);
+    this.step--;
   }
 
   getAddressArray(): FormArray {
@@ -87,26 +88,6 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
 
   canChangeStep(): boolean {
     return this.form.get(`${this.step}`).valid;
-  }
-
-  private initForm(): void {
-    this.form = this.formBuilder.group({
-      0: this.formBuilder.group({
-        age: ['', { validators: [Validators.required, minAgeValidator(21)] }],
-        name: ['', { validators: [Validators.required] }],
-      }),
-      1: this.formBuilder.group(
-        {
-          password: ['', [Validators.required]],
-          confirmPassword: ['', [Validators.required]],
-        },
-        {
-          validators: [Validators.required, passwordValidator],
-        }
-      ),
-      2: this.formBuilder.array([]),
-    });
-    this.addItem();
   }
 }
 

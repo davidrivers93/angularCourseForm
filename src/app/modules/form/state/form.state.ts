@@ -1,17 +1,16 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { CurrentStep, Step, STEPS } from '../enum/steps';
 import {
   SetAddressesDataState,
   SetPasswordDataState,
   SetPersonalDataState,
 } from './actions/actions.state';
-import { SetCurrentStep } from './actions/step.state';
+import { SetNextStep, SetPreviousStep } from './actions/step.state';
 
 interface FormStep {
   valid: boolean;
   value: any;
 }
-
-export type CurrentStep = 'personal' | 'password' | 'addresses';
 
 export interface FormStateModel {
   personal: FormStep;
@@ -21,19 +20,19 @@ export interface FormStateModel {
 }
 
 const DEFAULT_VALUES: FormStateModel = {
-  addresses: {
+  [CurrentStep.PERSONAL]: {
     valid: false,
     value: null,
   },
-  password: {
+  [CurrentStep.PASSWORD]: {
     valid: false,
     value: null,
   },
-  personal: {
+  [CurrentStep.ADDRESSES]: {
     valid: false,
     value: null,
   },
-  currentStep: 'personal',
+  currentStep: CurrentStep.PERSONAL,
 };
 
 @State<FormStateModel>({
@@ -41,6 +40,16 @@ const DEFAULT_VALUES: FormStateModel = {
   defaults: DEFAULT_VALUES,
 })
 export class FormState {
+  @Selector()
+  static currentStep({ currentStep }: FormStateModel): Step {
+    return STEPS[currentStep];
+  }
+
+  @Selector()
+  static stepIsValid({ currentStep, ...ctx }: FormStateModel): boolean {
+    return ctx[currentStep].valid;
+  }
+
   @Action(SetPersonalDataState)
   setPersonalDataState(
     ctx: StateContext<FormStateModel>,
@@ -71,13 +80,19 @@ export class FormState {
     });
   }
 
-  @Action(SetCurrentStep)
-  setCurrentStep(
-    ctx: StateContext<FormStateModel>,
-    { currentStep }: SetCurrentStep
-  ): void {
+  @Action(SetNextStep)
+  setNextStep(ctx: StateContext<FormStateModel>): void {
+    const step = ctx.getState().currentStep;
     ctx.patchState({
-      currentStep,
+      currentStep: STEPS[step].next,
+    });
+  }
+
+  @Action(SetPreviousStep)
+  setPreviousStep(ctx: StateContext<FormStateModel>): void {
+    const step = ctx.getState().currentStep;
+    ctx.patchState({
+      currentStep: STEPS[step].previous,
     });
   }
 }
