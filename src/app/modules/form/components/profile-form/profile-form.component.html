@@ -1,34 +1,27 @@
-<form [formGroup]="form">
-  <div *ngIf="step === FORM_KEYS.PERSONAL_DATA" formGroupName="0" class="group">
-    <input controlError placeholder="Edad" formControlName="age" />
-    <input controlError placeholder="Nombre" formControlName="name" />
-  </div>
+<form>
   <div
-    *ngIf="step === FORM_KEYS.PASSWORD"
+    *ngIf="isCurrentStep(CURRENT_STEP.PERSONAL)"
+    personalData
     class="group"
-    password
-    [password]="getPasswordsGroup()"
   ></div>
-  <div *ngIf="step === FORM_KEYS.ADDRESSES" class="group">
-    <button class="btn btn-primary" (click)="addItem()">Añadir</button>
-    <div
-      *ngFor="let formItem of getAddressArray().controls; let i = index"
-      address
-      [formGroup]="formItem"
-      [index]="i"
-      (removeAddress)="onRemoveAddress($event)"
-      class="group"
-    ></div>
-  </div>
-
+  <div
+    *ngIf="isCurrentStep(CURRENT_STEP.PASSWORD)"
+    password
+    class="group"
+  ></div>
+  <div
+    *ngIf="isCurrentStep(CURRENT_STEP.ADDRESSES)"
+    addresses
+    class="group"
+  ></div>
   <div
     buttons
-    [submitDisabled]="!form.valid"
-    [nextDisabled]="!canChangeStep()"
-    [backDisabled]="!canChangeStep()"
-    [backButtonVisible]="step >= 1"
-    [nextButtonVisible]="step < maximumStep - 1"
-    [submitButtonVisible]="step === maximumStep - 1"
+    [submitDisabled]="!(stepIsValid$ | async)"
+    [nextDisabled]="!(stepIsValid$ | async)"
+    [backDisabled]="!(stepIsValid$ | async)"
+    [backButtonVisible]="(currentStep$ | async).previous"
+    [nextButtonVisible]="(currentStep$ | async).next"
+    [submitButtonVisible]="!(currentStep$ | async).next"
     (submit)="onSubmit()"
     (next)="onNext()"
     (back)="onBack()"

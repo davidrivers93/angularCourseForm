@@ -5,116 +5,57 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
-import { Profile } from '../../../core/models/profile.model';
-import { minAgeValidator } from '../../validators/minAge/minAge.validator';
-import { passwordValidator } from '../../validators/password.validator';
+import { FormGroup, FormArray } from '@angular/forms';
+import { Select, Store } from '@ngxs/store';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-const FORM_KEYS = {
-  PERSONAL_DATA: 0,
-  PASSWORD: 1,
-  ADDRESSES: 2,
-};
-
-interface FormProfile {
-  age: number;
-  password: { password: string; confirmPassword: string };
-  addresses: any[];
-}
+import { FormState } from '../../state/form.state';
+import { CurrentStep, Step } from '../../enum/steps';
+import { SetNextStep, SetPreviousStep } from '../../state/actions/step.action';
 
 @Component({
   selector: '[profile-form]',
   templateUrl: './profile-form.component.html',
 })
-export class ProfileFormComponent implements OnInit, OnDestroy {
-  @Output() submitForm = new EventEmitter<Profile>();
+export class ProfileFormComponent implements OnInit {
+  @Output() submitForm = new EventEmitter<void>();
 
-  step = 0;
-  maximumStep = 0;
+  @Select(FormState.currentStep)
+  currentStep$: Observable<Step>;
+
+  @Select(FormState.stepIsValid)
+  stepIsValid$: Observable<CurrentStep>;
+
+  CURRENT_STEP = CurrentStep;
+  currentStep: string;
 
   form: FormGroup;
-  unsubscribe = new BehaviorSubject<any>(null);
 
-  FORM_KEYS = FORM_KEYS;
+  constructor(private store: Store) {}
 
-  constructor(private formBuilder: FormBuilder) {}
-
-  ngOnDestroy(): void {
-    this.unsubscribe.next(1);
-    this.unsubscribe.complete();
-  }
-
-  ngOnInit() {
-    this.initForm();
-    this.maximumStep = Object.values(FORM_KEYS).length;
-  }
-
-  onRemoveAddress(index: number) {
-    this.getAddressArray().removeAt(index);
+  ngOnInit(): void {
+    this.getCurrentStep();
   }
 
   onNext() {
-    this.step++;
+    this.store.dispatch(new SetNextStep());
   }
 
   onBack() {
-    this.step--;
-  }
-
-  addItem(): void {
-    const group = this.formBuilder.group({
-      direction: ['', [Validators.required]],
-      postalCode: [''],
-      city: '',
-      country: '',
-    });
-    this.getAddressArray().push(group);
-  }
-
-  getAddressArray(): FormArray {
-    return this.form.get(`${FORM_KEYS.ADDRESSES}`) as FormArray;
-  }
-
-  getPasswordsGroup(): FormGroup {
-    return this.form.get(`${FORM_KEYS.PASSWORD}`) as FormGroup;
+    this.store.dispatch(new SetPreviousStep());
   }
 
   onSubmit(): void {
-    const values = parseForm(this.form.value);
-    this.submitForm.emit(values);
+    this.submitForm.emit();
   }
 
-  canChangeStep(): boolean {
-    return this.form.get(`${this.step}`).valid;
+  isCurrentStep(step: string): boolean {
+    return step === this.currentStep;
   }
 
-  private initForm(): void {
-    this.form = this.formBuilder.group({
-      0: this.formBuilder.group({
-        age: ['', { validators: [Validators.required, minAgeValidator(21)] }],
-        name: ['', { validators: [Validators.required] }],
-      }),
-      1: this.formBuilder.group(
-        {
-          password: ['', [Validators.required]],
-          confirmPassword: ['', [Validators.required]],
-        },
-        {
-          validators: [Validators.required, passwordValidator],
-        }
-      ),
-      2: this.formBuilder.array([]),
-    });
-    this.addItem();
+  private getCurrentStep(): void {
+    this.currentStep$.subscribe(
+      ({ current }: Step) => (this.currentStep = current)
+    );
   }
-}
-
-function parseForm(formValue: FormProfile): Profile {
-  return {
-    age: formValue[FORM_KEYS.PERSONAL_DATA].age,
-    name: formValue[FORM_KEYS.PERSONAL_DATA].name,
-    addresses: formValue[FORM_KEYS.ADDRESSES],
-    password: formValue[FORM_KEYS.PASSWORD].password,
-  };
 }

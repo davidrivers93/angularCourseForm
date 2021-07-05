@@ -98,7 +98,7 @@ export class ControlErrorDirective implements AfterViewInit {
   }
 
   private hideMessage() {
-    this.overlayRef.detach();
+    this.overlayRef?.detach();
     this.componentRef = null;
   }
 
