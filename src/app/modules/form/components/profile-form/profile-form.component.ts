@@ -8,94 +8,54 @@ import {
 import { FormGroup, FormArray } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Profile } from '../../../core/models/profile.model';
 
 import { FormState } from '../../state/form.state';
-import { CurrentStep } from '../../enum/steps';
-import { SetNextStep, SetPreviousStep } from '../../state/actions/step.state';
-
-const FORM_KEYS = {
-  PERSONAL_DATA: 0,
-  PASSWORD: 1,
-  ADDRESSES: 2,
-};
-
-interface FormProfile {
-  age: number;
-  password: { password: string; confirmPassword: string };
-  addresses: any[];
-}
+import { CurrentStep, Step } from '../../enum/steps';
+import { SetNextStep, SetPreviousStep } from '../../state/actions/step.action';
 
 @Component({
   selector: '[profile-form]',
   templateUrl: './profile-form.component.html',
 })
-export class ProfileFormComponent implements OnInit, OnDestroy {
-  @Output() submitForm = new EventEmitter<Profile>();
+export class ProfileFormComponent implements OnInit {
+  @Output() submitForm = new EventEmitter<void>();
 
   @Select(FormState.currentStep)
-  currentStep$: Observable<CurrentStep>;
+  currentStep$: Observable<Step>;
 
   @Select(FormState.stepIsValid)
   stepIsValid$: Observable<CurrentStep>;
 
-  step = 0;
-  maximumStep = 0;
+  CURRENT_STEP = CurrentStep;
+  currentStep: string;
 
   form: FormGroup;
-  unsubscribe = new BehaviorSubject<any>(null);
-
-  FORM_KEYS = FORM_KEYS;
 
   constructor(private store: Store) {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe.next(1);
-    this.unsubscribe.complete();
-  }
-
-  ngOnInit() {
-    this.maximumStep = Object.values(FORM_KEYS).length;
-  }
-
-  onRemoveAddress(index: number) {
-    this.getAddressArray().removeAt(index);
+  ngOnInit(): void {
+    this.getCurrentStep();
   }
 
   onNext() {
     this.store.dispatch(new SetNextStep());
-    this.step++;
   }
 
   onBack() {
     this.store.dispatch(new SetPreviousStep());
-
-    this.step--;
-  }
-
-  getAddressArray(): FormArray {
-    return this.form.get(`${FORM_KEYS.ADDRESSES}`) as FormArray;
-  }
-
-  getPasswordsGroup(): FormGroup {
-    return this.form.get(`${FORM_KEYS.PASSWORD}`) as FormGroup;
   }
 
   onSubmit(): void {
-    const values = parseForm(this.form.value);
-    this.submitForm.emit(values);
+    this.submitForm.emit();
   }
 
-  canChangeStep(): boolean {
-    return this.form.get(`${this.step}`).valid;
+  isCurrentStep(step: string): boolean {
+    return step === this.currentStep;
   }
-}
 
-function parseForm(formValue: FormProfile): Profile {
-  return {
-    age: formValue[FORM_KEYS.PERSONAL_DATA].age,
-    name: formValue[FORM_KEYS.PERSONAL_DATA].name,
-    addresses: formValue[FORM_KEYS.ADDRESSES],
-    password: formValue[FORM_KEYS.PASSWORD].password,
-  };
+  private getCurrentStep(): void {
+    this.currentStep$.subscribe(
+      ({ current }: Step) => (this.currentStep = current)
+    );
+  }
 }

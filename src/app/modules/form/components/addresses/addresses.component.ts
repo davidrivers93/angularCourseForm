@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { SetAddressesDataState } from '../../state/actions/actions.state';
+import { SetAddressesDataState } from '../../state/actions/actions.action';
 
 @Component({
   selector: '[addresses]',

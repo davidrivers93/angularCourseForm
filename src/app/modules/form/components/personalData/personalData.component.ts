@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { SetPersonalDataState } from '../../state/actions/actions.state';
+import { SetPersonalDataState } from '../../state/actions/actions.action';
 import { minAgeValidator } from '../../validators/minAge/minAge.validator';
 
 @Component({

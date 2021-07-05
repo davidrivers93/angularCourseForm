@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { SetPasswordDataState } from '../../state/actions/actions.state';
+import { SetPasswordDataState } from '../../state/actions/actions.action';
 import { VALIDATORS_MESSAGES } from '../../validators/messages';
 import { passwordValidator } from '../../validators/password.validator';
 

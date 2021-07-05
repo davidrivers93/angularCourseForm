@@ -1,11 +1,16 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ProfileService } from '../../core/services/profile.service';
 import { CurrentStep, Step, STEPS } from '../enum/steps';
 import {
   SetAddressesDataState,
   SetPasswordDataState,
   SetPersonalDataState,
-} from './actions/actions.state';
-import { SetNextStep, SetPreviousStep } from './actions/step.state';
+} from './actions/actions.action';
+import { SetNextStep, SetPreviousStep } from './actions/step.action';
+import { SubmitFormAction } from './actions/submit.action';
 
 interface FormStep {
   valid: boolean;
@@ -17,6 +22,7 @@ export interface FormStateModel {
   password: FormStep;
   addresses: FormStep;
   currentStep: CurrentStep;
+  createdId: number;
 }
 
 const DEFAULT_VALUES: FormStateModel = {
@@ -33,12 +39,14 @@ const DEFAULT_VALUES: FormStateModel = {
     value: null,
   },
   currentStep: CurrentStep.PERSONAL,
+  createdId: null,
 };
 
 @State<FormStateModel>({
   name: 'FormStateModel',
   defaults: DEFAULT_VALUES,
 })
+@Injectable()
 export class FormState {
   @Selector()
   static currentStep({ currentStep }: FormStateModel): Step {
@@ -49,6 +57,8 @@ export class FormState {
   static stepIsValid({ currentStep, ...ctx }: FormStateModel): boolean {
     return ctx[currentStep].valid;
   }
+
+  constructor(private profileService: ProfileService) {}
 
   @Action(SetPersonalDataState)
   setPersonalDataState(
@@ -95,4 +105,25 @@ export class FormState {
       currentStep: STEPS[step].previous,
     });
   }
+
+  @Action(SubmitFormAction)
+  submitForm(ctx: StateContext<FormStateModel>): Observable<{ id: number }> {
+    const profile = createProfile(ctx.getState());
+    return this.profileService.createProfile(profile).pipe(
+      tap(({ id }) =>
+        ctx.patchState({
+          createdId: id,
+        })
+      )
+    );
+  }
+}
+
+function createProfile({ addresses, password, personal }: FormStateModel): any {
+  return {
+    age: personal.value.age,
+    name: personal.value.name,
+    addresses: addresses.value,
+    password: password.value.password,
+  };
 }

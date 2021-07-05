@@ -1,11 +1,19 @@
 <form>
   <div
-    *ngIf="step === FORM_KEYS.PERSONAL_DATA"
+    *ngIf="isCurrentStep(CURRENT_STEP.PERSONAL)"
     personalData
     class="group"
   ></div>
-  <div *ngIf="step === FORM_KEYS.PASSWORD" class="group" password></div>
-  <div *ngIf="step === FORM_KEYS.ADDRESSES" class="group" addresses></div>
+  <div
+    *ngIf="isCurrentStep(CURRENT_STEP.PASSWORD)"
+    password
+    class="group"
+  ></div>
+  <div
+    *ngIf="isCurrentStep(CURRENT_STEP.ADDRESSES)"
+    addresses
+    class="group"
+  ></div>
   <div
     buttons
     [submitDisabled]="!(stepIsValid$ | async)"
