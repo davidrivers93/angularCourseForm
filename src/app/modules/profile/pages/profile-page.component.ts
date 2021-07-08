@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   ProfileEntity,
   ProfileService,
@@ -15,12 +15,17 @@ export class ProfilePageComponent implements OnInit {
 
   constructor(
     private profileService: ProfileService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.getProfileId();
     this.getProfile();
+  }
+
+  goToForm() {
+    this.router.navigate(['/']);
   }
 
   private getProfileId(): void {

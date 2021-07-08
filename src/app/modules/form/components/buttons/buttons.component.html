@@ -1,6 +1,7 @@
 <button
   *ngIf="backButtonVisible"
   class="btn btn-primary"
+  type="button"
   (click)="onBack()"
   [disabled]="backDisabled"
 >
@@ -9,6 +10,7 @@
 <button
   *ngIf="nextButtonVisible"
   class="btn btn-primary"
+  type="button"
   (click)="onNext()"
   [disabled]="nextDisabled"
 >
@@ -17,6 +19,7 @@
 <button
   *ngIf="submitButtonVisible"
   class="btn btn-primary"
+  type="button"
   (click)="onSubmit()"
   [disabled]="submitDisabled"
 >

@@ -7,14 +7,27 @@ import { ProfileFormComponent } from './components/profile-form/profile-form.com
 import { FormRouter } from './form-routing.module';
 import { FormPageComponent } from './pages/form/form-page.component';
 
+import { NgxsModule } from '@ngxs/store';
+import { FormStore } from './store/form.store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { PersonalDataComponent } from './components/personalData/personalData.component';
+import { AddressesComponent } from './components/addresses/addresses.component';
+
 @NgModule({
-  imports: [FormRouter, SharedModule],
+  imports: [
+    FormRouter,
+    SharedModule,
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsModule.forRoot([FormStore]),
+  ],
   declarations: [
     ProfileFormComponent,
     FormPageComponent,
     PasswordComponent,
     ErrorComponent,
     ButtonsComponent,
+    PersonalDataComponent,
+    AddressesComponent,
   ],
 })
 export class FormModule {}

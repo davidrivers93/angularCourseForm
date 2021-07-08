@@ -1,120 +1,55 @@
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
-import { Profile } from '../../../core/models/profile.model';
-import { minAgeValidator } from '../../validators/minAge/minAge.validator';
-import { passwordValidator } from '../../validators/password.validator';
-
-const FORM_KEYS = {
-  PERSONAL_DATA: 0,
-  PASSWORD: 1,
-  ADDRESSES: 2,
-};
-
-interface FormProfile {
-  age: number;
-  password: { password: string; confirmPassword: string };
-  addresses: any[];
-}
+  FormStore,
+  SetNextStep,
+  SetPreviousStep,
+  StepName,
+} from '../../store/form.store';
 
 @Component({
   selector: '[profile-form]',
   templateUrl: './profile-form.component.html',
 })
-export class ProfileFormComponent implements OnInit, OnDestroy {
-  @Output() submitForm = new EventEmitter<Profile>();
+export class ProfileFormComponent implements OnInit {
+  @Output() submitForm = new EventEmitter<void>();
 
-  step = 0;
-  maximumStep = 0;
+  @Select(FormStore.formIsValid) formIsValid$: Observable<boolean>;
+  @Select(FormStore.hasNextStep) hasNextStep$: Observable<boolean>;
+  @Select(FormStore.hasPreviousStep) hasPreviousStep$: Observable<boolean>;
+  @Select(FormStore.formStepIsValid) formStepIsValid$: Observable<boolean>;
+  @Select(FormStore.currentStep) currentStep$: Observable<string>;
 
-  form: FormGroup;
-  unsubscribe = new BehaviorSubject<any>(null);
+  private currentStep: string;
 
-  FORM_KEYS = FORM_KEYS;
+  StepName = StepName;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private store: Store) {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe.next(1);
-    this.unsubscribe.complete();
-  }
-
-  ngOnInit() {
-    this.initForm();
-    this.maximumStep = Object.values(FORM_KEYS).length;
-  }
-
-  onRemoveAddress(index: number) {
-    this.getAddressArray().removeAt(index);
+  ngOnInit(): void {
+    this.currentStep$.subscribe(
+      (currentStep) => (this.currentStep = currentStep)
+    );
   }
 
   onNext() {
-    this.step++;
+    this.store.dispatch(new SetNextStep());
   }
 
   onBack() {
-    this.step--;
+    this.store.dispatch(new SetPreviousStep());
   }
 
-  addItem(): void {
-    const group = this.formBuilder.group({
-      direction: ['', [Validators.required]],
-      postalCode: [''],
-      city: '',
-      country: '',
-    });
-    this.getAddressArray().push(group);
-  }
-
-  getAddressArray(): FormArray {
-    return this.form.get(`${FORM_KEYS.ADDRESSES}`) as FormArray;
-  }
-
-  getPasswordsGroup(): FormGroup {
-    return this.form.get(`${FORM_KEYS.PASSWORD}`) as FormGroup;
+  isCurrentStep(step: string): boolean {
+    return this.currentStep === step;
   }
 
   onSubmit(): void {
-    const values = parseForm(this.form.value);
-    this.submitForm.emit(values);
+    this.submitForm.emit();
   }
 
   canChangeStep(): boolean {
-    return this.form.get(`${this.step}`).valid;
+    return true;
   }
-
-  private initForm(): void {
-    this.form = this.formBuilder.group({
-      0: this.formBuilder.group({
-        age: ['', { validators: [Validators.required, minAgeValidator(21)] }],
-        name: ['', { validators: [Validators.required] }],
-      }),
-      1: this.formBuilder.group(
-        {
-          password: ['', [Validators.required]],
-          confirmPassword: ['', [Validators.required]],
-        },
-        {
-          validators: [Validators.required, passwordValidator],
-        }
-      ),
-      2: this.formBuilder.array([]),
-    });
-    this.addItem();
-  }
-}
-
-function parseForm(formValue: FormProfile): Profile {
-  return {
-    age: formValue[FORM_KEYS.PERSONAL_DATA].age,
-    name: formValue[FORM_KEYS.PERSONAL_DATA].name,
-    addresses: formValue[FORM_KEYS.ADDRESSES],
-    password: formValue[FORM_KEYS.PASSWORD].password,
-  };
 }
